@@ -1,44 +1,77 @@
-import { useState } from 'react'
-import { ShieldCheck, Menu, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, X, ChevronDown } from 'lucide-react'
 
 const links = [
   { href: '#home',     label: 'Home' },
-  { href: '#analyzer', label: 'Analyze Job' },
+  { href: '#analyzer', label: 'Analyze' },
   { href: '#how',      label: 'How It Works' },
   { href: '#about',    label: 'About' },
 ]
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen]       = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <header
-      className="sticky top-0 z-30"
+      className="sticky top-0 z-50 transition-all duration-300"
       style={{
-        background: 'rgba(255,255,255,0.97)',
-        borderBottom: '1px solid #E2E8F0',
-        backdropFilter: 'blur(8px)',
+        background: scrolled
+          ? 'rgba(8, 11, 20, 0.92)'
+          : 'rgba(8, 11, 20, 0.6)',
+        borderBottom: scrolled
+          ? '1px solid rgba(108,99,255,0.2)'
+          : '1px solid rgba(255,255,255,0.05)',
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
+        boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.4)' : 'none',
       }}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-[68px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
         {/* ── Logo ── */}
         <a href="#home" className="flex items-center gap-3" style={{ textDecoration: 'none' }}>
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-white"
-            style={{ background: '#4F46E5' }}
+            className="relative flex items-center justify-center"
+            style={{ width: 44, height: 44 }}
           >
-            <ShieldCheck size={20} strokeWidth={2.5} />
+            {/* Glow ring */}
+            <div
+              className="absolute inset-0 rounded-xl animate-glow-pulse"
+              style={{
+                background: 'linear-gradient(135deg, rgba(108,99,255,0.3), rgba(6,182,212,0.2))',
+                borderRadius: 12,
+                filter: 'blur(6px)',
+              }}
+            />
+            <img
+              src="/logo.png"
+              alt="JobShield AI logo"
+              style={{ width: 40, height: 40, objectFit: 'contain', position: 'relative', zIndex: 1 }}
+            />
           </div>
           <div>
             <p
-              className="text-base font-extrabold leading-tight tracking-tight"
-              style={{ color: '#0F172A' }}
+              className="text-[15px] font-extrabold leading-tight tracking-tight"
+              style={{ color: '#F1F5F9' }}
             >
-              JobShield <span style={{ color: '#4F46E5' }}>AI</span>
+              JobShield <span
+                style={{
+                  background: 'linear-gradient(90deg, #6C63FF, #06B6D4)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >AI</span>
             </p>
-            <p className="text-[11px] font-medium leading-none" style={{ color: '#94A3B8' }}>
-              Fake job detection
+            <p className="text-[10px] font-medium leading-none" style={{ color: '#475569' }}>
+              Safer Job Searches
             </p>
           </div>
         </a>
@@ -49,35 +82,39 @@ export default function Navbar() {
             <a
               key={href}
               href={href}
-              className="rounded-md px-3.5 py-2 text-sm font-semibold transition-colors"
-              style={{ color: '#64748B', textDecoration: 'none' }}
+              className="rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-200"
+              style={{ color: '#94A3B8', textDecoration: 'none' }}
               onMouseEnter={e => {
-                e.currentTarget.style.color = '#4F46E5'
-                e.currentTarget.style.background = '#EEF2FF'
+                e.currentTarget.style.color = '#F1F5F9'
+                e.currentTarget.style.background = 'rgba(108,99,255,0.12)'
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.color = '#64748B'
+                e.currentTarget.style.color = '#94A3B8'
                 e.currentTarget.style.background = 'transparent'
               }}
             >
               {label}
             </a>
           ))}
+
           <a
             href="#analyzer"
-            className="ml-3 inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-white transition"
-            style={{ background: '#4F46E5', textDecoration: 'none' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#4338CA')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#4F46E5')}
+            className="btn-primary ml-3 px-5 py-2.5 text-sm"
+            style={{ textDecoration: 'none', borderRadius: 12 }}
           >
+            <span style={{ fontSize: 14 }}>⚡</span>
             Analyze Job
           </a>
         </nav>
 
         {/* ── Mobile hamburger ── */}
         <button
-          className="flex items-center justify-center rounded-md p-2 md:hidden"
-          style={{ border: '1px solid #E2E8F0', color: '#64748B' }}
+          className="flex items-center justify-center rounded-xl p-2.5 md:hidden transition-all"
+          style={{
+            border: '1px solid rgba(108,99,255,0.25)',
+            background: 'rgba(108,99,255,0.08)',
+            color: '#94A3B8',
+          }}
           onClick={() => setOpen(v => !v)}
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
@@ -89,8 +126,12 @@ export default function Navbar() {
       {/* ── Mobile menu ── */}
       {open && (
         <nav
-          className="border-t px-4 pb-4 pt-2 md:hidden"
-          style={{ borderColor: '#E2E8F0', background: '#FFFFFF' }}
+          className="border-t px-4 pb-5 pt-3 md:hidden animate-slide-up"
+          style={{
+            borderColor: 'rgba(108,99,255,0.15)',
+            background: 'rgba(8,11,20,0.98)',
+            backdropFilter: 'blur(24px)',
+          }}
           aria-label="Mobile navigation"
         >
           {links.map(({ href, label }) => (
@@ -98,19 +139,28 @@ export default function Navbar() {
               key={href}
               href={href}
               onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2.5 text-sm font-semibold"
-              style={{ color: '#334155', textDecoration: 'none' }}
+              className="flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold mb-1 transition-all"
+              style={{ color: '#CBD5E1', textDecoration: 'none' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(108,99,255,0.1)'
+                e.currentTarget.style.color = '#F1F5F9'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent'
+                e.currentTarget.style.color = '#CBD5E1'
+              }}
             >
               {label}
+              <ChevronDown size={14} style={{ color: '#475569', transform: 'rotate(-90deg)' }} />
             </a>
           ))}
           <a
             href="#analyzer"
             onClick={() => setOpen(false)}
-            className="mt-2 block rounded-lg px-3 py-2.5 text-center text-sm font-bold text-white"
-            style={{ background: '#4F46E5', textDecoration: 'none' }}
+            className="btn-primary mt-3 w-full py-3 text-sm"
+            style={{ textDecoration: 'none', borderRadius: 12 }}
           >
-            Analyze Job
+            ⚡ Analyze Job
           </a>
         </nav>
       )}

@@ -74,46 +74,67 @@ export default function SafetyChecks({ jobText }) {
   const hasFlags = flags.length > 0
 
   return (
-    <div className="card overflow-hidden animate-slide-up">
-
+    <div
+      className="overflow-hidden animate-slide-up"
+      style={{
+        background: 'rgba(15,23,42,0.7)',
+        border: '1px solid rgba(255,255,255,0.07)',
+        borderRadius: 20,
+        backdropFilter: 'blur(16px)',
+      }}
+    >
       {/* Header */}
       <div
         className="flex items-center gap-3 px-6 py-4"
-        style={{ borderBottom: '1px solid #E2E8F0' }}
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
       >
         <div
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
           style={{
-            background: hasFlags ? '#FEF2F2' : '#ECFDF5',
-            color:      hasFlags ? '#DC2626' : '#10B981',
+            background: hasFlags ? 'rgba(245,158,11,0.12)' : 'rgba(16,185,129,0.12)',
+            border:     hasFlags ? '1px solid rgba(245,158,11,0.25)' : '1px solid rgba(16,185,129,0.25)',
           }}
         >
-          {hasFlags ? <ShieldAlert size={18} /> : <ShieldCheck size={18} />}
+          {hasFlags
+            ? <ShieldAlert size={18} style={{ color: '#F59E0B' }} />
+            : <ShieldCheck size={18} style={{ color: '#10B981' }} />}
         </div>
         <div>
-          <h3 className="text-sm font-bold" style={{ color: '#0F172A' }}>
+          <h3 className="text-sm font-bold" style={{ color: '#F1F5F9' }}>
             Safety Checks
           </h3>
-          <p className="text-xs" style={{ color: '#94A3B8' }}>
+          <p className="text-[11px]" style={{ color: '#475569' }}>
             Rule-based keyword analysis — independent of the ML model
           </p>
         </div>
+        {hasFlags && (
+          <div
+            className="ml-auto rounded-full px-2.5 py-1 text-[10px] font-bold"
+            style={{
+              background: 'rgba(245,158,11,0.12)',
+              border: '1px solid rgba(245,158,11,0.3)',
+              color: '#FCD34D',
+            }}
+          >
+            {flags.length} flag{flags.length > 1 ? 's' : ''}
+          </div>
+        )}
       </div>
 
       <div className="px-6 py-5">
 
         {/* Methodology note */}
         <div
-          className="mb-4 flex gap-2.5 rounded-lg px-4 py-3"
+          className="mb-4 flex gap-2.5 rounded-xl px-4 py-3"
           style={{
-            background: '#EFF6FF',
-            border: '1px solid #BFDBFE',
+            background: 'rgba(6,182,212,0.06)',
+            border: '1px solid rgba(6,182,212,0.2)',
           }}
         >
-          <Info size={14} className="mt-0.5 shrink-0" style={{ color: '#3B82F6' }} />
-          <p className="text-xs leading-5" style={{ color: '#1E40AF' }}>
+          <Info size={14} className="mt-0.5 shrink-0" style={{ color: '#06B6D4' }} />
+          <p className="text-xs leading-5" style={{ color: '#67E8F9' }}>
             These checks scan for specific phrases associated with job fraud. They are{' '}
-            <strong>separate from</strong> the ML prediction above. A flag here does not
+            <strong style={{ color: '#22D3EE' }}>separate from</strong> the ML prediction above. A flag here does not
             prove fraud — it highlights text worth investigating further.
           </p>
         </div>
@@ -123,22 +144,22 @@ export default function SafetyChecks({ jobText }) {
             {flags.map(flag => (
               <li
                 key={flag.id}
-                className="flex gap-3 rounded-lg px-4 py-3"
+                className="flex gap-3 rounded-xl px-4 py-3.5 animate-slide-up"
                 style={{
-                  background: '#FFFBEB',
-                  border: '1px solid #FDE68A',
+                  background: 'rgba(245,158,11,0.07)',
+                  border: '1px solid rgba(245,158,11,0.2)',
                 }}
               >
                 <ShieldAlert
                   size={16}
                   className="mt-0.5 shrink-0"
-                  style={{ color: '#D97706' }}
+                  style={{ color: '#F59E0B' }}
                 />
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: '#78350F' }}>
+                  <p className="text-sm font-semibold" style={{ color: '#FCD34D' }}>
                     {flag.label}
                   </p>
-                  <p className="mt-0.5 text-xs leading-5" style={{ color: '#92400E' }}>
+                  <p className="mt-0.5 text-xs leading-5" style={{ color: '#78350F', color: '#D97706' }}>
                     {flag.description}
                   </p>
                 </div>
@@ -147,23 +168,22 @@ export default function SafetyChecks({ jobText }) {
           </ul>
         ) : (
           <div
-            className="flex gap-3 rounded-lg px-4 py-3"
+            className="flex gap-3 rounded-xl px-4 py-3.5"
             style={{
-              background: '#ECFDF5',
-              border: '1px solid #A7F3D0',
+              background: 'rgba(16,185,129,0.07)',
+              border: '1px solid rgba(16,185,129,0.2)',
             }}
           >
             <ShieldCheck size={16} className="mt-0.5 shrink-0" style={{ color: '#10B981' }} />
-            <p className="text-sm" style={{ color: '#065F46' }}>
+            <p className="text-sm" style={{ color: '#6EE7B7' }}>
               No specific red-flag phrases were detected. Continue to verify the employer
               through official channels.
             </p>
           </div>
         )}
 
-        <p className="mt-4 text-xs leading-5" style={{ color: '#94A3B8' }}>
-          These checks cover common fraud patterns but are not exhaustive. Absence of
-          flags does not confirm a posting is genuine.
+        <p className="mt-4 text-[11px] leading-5" style={{ color: '#334155' }}>
+          These checks cover common fraud patterns but are not exhaustive. Absence of flags does not confirm a posting is genuine.
         </p>
       </div>
     </div>
