@@ -1,33 +1,54 @@
-import { Lock } from 'lucide-react'
+import { Lock, CheckCircle2 } from 'lucide-react'
+
+const items = [
+  'Text is sent only to the Flask API running locally on your machine (127.0.0.1:5000). It is not transmitted to any external server.',
+  'No submitted text is stored, logged persistently, or used to retrain the model.',
+  'The safety-check analysis runs entirely inside your browser and never leaves your device.',
+  'No cookies, tracking pixels, or analytics scripts are used in this application.',
+]
 
 export default function PrivacyNotice() {
   return (
-    <section className="bg-slate-50 py-10 sm:py-12">
+    <section
+      className="py-12"
+      style={{ background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-slate-200 bg-white px-6 py-6 shadow-sm sm:px-8">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-500">
-              <Lock size={17} />
+        <div
+          className="mx-auto max-w-2xl rounded-xl px-6 py-6 sm:px-8"
+          style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            boxShadow: '0 1px 3px 0 rgb(0 0 0 / 0.06)',
+          }}
+        >
+          {/* Header */}
+          <div className="mb-5 flex items-center gap-3">
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-lg"
+              style={{ background: '#EEF2FF', color: '#4F46E5' }}
+            >
+              <Lock size={16} strokeWidth={2.5} />
             </div>
-            <h2 className="font-extrabold text-slate-900">Privacy notice</h2>
+            <h2 className="font-bold" style={{ color: '#0F172A' }}>
+              Privacy notice
+            </h2>
           </div>
-          <ul className="space-y-2.5 text-sm leading-6 text-slate-600">
-            <li className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
-              The text you submit is sent only to the Flask API running locally on your machine (<code className="rounded bg-slate-100 px-1 text-xs font-mono">127.0.0.1:5000</code>). It is not transmitted to any external server.
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
-              No submitted text is stored, logged persistently, or used to retrain the model.
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
-              The safety-check analysis runs entirely inside your browser and never leaves your device.
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
-              No cookies, tracking pixels, or analytics scripts are used in this application.
-            </li>
+
+          {/* Items */}
+          <ul className="space-y-3">
+            {items.map((item, i) => (
+              <li key={i} className="flex gap-3">
+                <CheckCircle2
+                  size={15}
+                  className="mt-0.5 shrink-0"
+                  style={{ color: '#10B981' }}
+                />
+                <p className="text-sm leading-6" style={{ color: '#64748B' }}>
+                  {item}
+                </p>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

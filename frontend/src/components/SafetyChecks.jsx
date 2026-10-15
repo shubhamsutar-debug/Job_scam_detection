@@ -1,15 +1,11 @@
 import { ShieldAlert, ShieldCheck, Info } from 'lucide-react'
 
-/**
- * Rule-based safety checks — completely independent of the ML model.
- * Each rule describes what it looks for and why it matters.
- * Only flags that are actually found in the submitted text are shown.
- */
 const RULES = [
   {
     id: 'fee',
     label: 'Upfront payment or registration fee',
-    description: 'Legitimate employers never ask candidates to pay to apply, register, or receive a starter kit.',
+    description:
+      'Legitimate employers never ask candidates to pay to apply, register, or receive a starter kit.',
     patterns: [
       /registration fee/i,
       /starter kit fee/i,
@@ -24,7 +20,8 @@ const RULES = [
   {
     id: 'credentials',
     label: 'Request for bank details, OTPs, or identity documents',
-    description: 'Sharing sensitive credentials, OTPs, or ID scans before a verified offer is a major fraud risk.',
+    description:
+      'Sharing sensitive credentials, OTPs, or ID scans before a verified offer is a major fraud risk.',
     patterns: [
       /bank (account|details|number|credentials)/i,
       /otp/i,
@@ -40,7 +37,8 @@ const RULES = [
   {
     id: 'earnings',
     label: 'Unrealistic earnings guarantee',
-    description: 'Promises of very high weekly pay with no stated experience or skill requirements are a common fraud pattern.',
+    description:
+      'Promises of very high weekly pay with no stated experience or skill requirements are a common fraud pattern.',
     patterns: [
       /earn(ing)? up to \$[\d,]+\s*(per|a)\s*week/i,
       /make.{0,20}\$[\d,]+.{0,20}(day|week|month)/i,
@@ -55,7 +53,8 @@ const RULES = [
   {
     id: 'contact',
     label: 'Unverifiable or informal contact channel only',
-    description: 'Using only WhatsApp, personal email addresses, or no traceable contact information can indicate a fraudulent posting.',
+    description:
+      'Using only WhatsApp, personal email addresses, or no traceable contact information can indicate a fraudulent posting.',
     patterns: [
       /whatsapp\s*[:\+\d]/i,
       /contact us on whatsapp/i,
@@ -67,33 +66,52 @@ const RULES = [
 ]
 
 function runChecks(text) {
-  return RULES.filter(rule =>
-    rule.patterns.some(pattern => pattern.test(text))
-  )
+  return RULES.filter(r => r.patterns.some(p => p.test(text)))
 }
 
 export default function SafetyChecks({ jobText }) {
-  const flags = runChecks(jobText)
+  const flags    = runChecks(jobText)
   const hasFlags = flags.length > 0
 
   return (
-    <div className="animate-slide-up rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="card overflow-hidden animate-slide-up">
+
       {/* Header */}
-      <div className="flex items-center gap-3 border-b border-slate-100 px-6 py-4">
-        <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${hasFlags ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+      <div
+        className="flex items-center gap-3 px-6 py-4"
+        style={{ borderBottom: '1px solid #E2E8F0' }}
+      >
+        <div
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+          style={{
+            background: hasFlags ? '#FEF2F2' : '#ECFDF5',
+            color:      hasFlags ? '#DC2626' : '#10B981',
+          }}
+        >
           {hasFlags ? <ShieldAlert size={18} /> : <ShieldCheck size={18} />}
         </div>
         <div>
-          <h3 className="font-extrabold text-slate-900">Safety Checks</h3>
-          <p className="text-xs text-slate-400">Rule-based keyword analysis — independent of the ML model</p>
+          <h3 className="text-sm font-bold" style={{ color: '#0F172A' }}>
+            Safety Checks
+          </h3>
+          <p className="text-xs" style={{ color: '#94A3B8' }}>
+            Rule-based keyword analysis — independent of the ML model
+          </p>
         </div>
       </div>
 
       <div className="px-6 py-5">
+
         {/* Methodology note */}
-        <div className="mb-4 flex gap-2.5 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
-          <Info size={15} className="mt-0.5 shrink-0 text-blue-500" />
-          <p className="text-xs leading-5 text-blue-700">
+        <div
+          className="mb-4 flex gap-2.5 rounded-lg px-4 py-3"
+          style={{
+            background: '#EFF6FF',
+            border: '1px solid #BFDBFE',
+          }}
+        >
+          <Info size={14} className="mt-0.5 shrink-0" style={{ color: '#3B82F6' }} />
+          <p className="text-xs leading-5" style={{ color: '#1E40AF' }}>
             These checks scan for specific phrases associated with job fraud. They are{' '}
             <strong>separate from</strong> the ML prediction above. A flag here does not
             prove fraud — it highlights text worth investigating further.
@@ -101,31 +119,51 @@ export default function SafetyChecks({ jobText }) {
         </div>
 
         {hasFlags ? (
-          <ul className="space-y-3">
+          <ul className="space-y-2.5">
             {flags.map(flag => (
               <li
                 key={flag.id}
-                className="flex gap-3 rounded-xl border border-amber-100 bg-amber-50 px-4 py-3"
+                className="flex gap-3 rounded-lg px-4 py-3"
+                style={{
+                  background: '#FFFBEB',
+                  border: '1px solid #FDE68A',
+                }}
               >
-                <ShieldAlert size={17} className="mt-0.5 shrink-0 text-amber-600" />
+                <ShieldAlert
+                  size={16}
+                  className="mt-0.5 shrink-0"
+                  style={{ color: '#D97706' }}
+                />
                 <div>
-                  <p className="text-sm font-bold text-amber-900">{flag.label}</p>
-                  <p className="mt-0.5 text-xs leading-5 text-amber-800">{flag.description}</p>
+                  <p className="text-sm font-semibold" style={{ color: '#78350F' }}>
+                    {flag.label}
+                  </p>
+                  <p className="mt-0.5 text-xs leading-5" style={{ color: '#92400E' }}>
+                    {flag.description}
+                  </p>
                 </div>
               </li>
             ))}
           </ul>
         ) : (
-          <div className="flex gap-3 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3">
-            <ShieldCheck size={17} className="mt-0.5 shrink-0 text-emerald-600" />
-            <p className="text-sm text-emerald-800">
-              No specific red-flag phrases were detected. Continue to verify the employer through official channels.
+          <div
+            className="flex gap-3 rounded-lg px-4 py-3"
+            style={{
+              background: '#ECFDF5',
+              border: '1px solid #A7F3D0',
+            }}
+          >
+            <ShieldCheck size={16} className="mt-0.5 shrink-0" style={{ color: '#10B981' }} />
+            <p className="text-sm" style={{ color: '#065F46' }}>
+              No specific red-flag phrases were detected. Continue to verify the employer
+              through official channels.
             </p>
           </div>
         )}
 
-        <p className="mt-4 text-xs leading-5 text-slate-400">
-          These checks cover common fraud patterns but are not exhaustive. Absence of flags does not confirm a posting is genuine.
+        <p className="mt-4 text-xs leading-5" style={{ color: '#94A3B8' }}>
+          These checks cover common fraud patterns but are not exhaustive. Absence of
+          flags does not confirm a posting is genuine.
         </p>
       </div>
     </div>

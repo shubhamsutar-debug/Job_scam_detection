@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import {
-  ShieldCheck, ShieldAlert, CheckCircle2, AlertTriangle,
-  ChevronDown, ChevronUp, RotateCcw, ArrowRight,
+  ShieldCheck, ShieldAlert, AlertTriangle,
+  ChevronDown, ChevronUp, RotateCcw, ArrowRight, CheckCircle2,
 } from 'lucide-react'
 import SafetyChecks from './SafetyChecks'
 
 const GENUINE_STEPS = [
-  'Verify the company exists by searching its official website independently (not via the link in the ad).',
-  'Confirm the job appears on the company\'s official careers page.',
+  'Verify the company exists by searching its official website independently — not via any link in the ad.',
+  "Confirm the job appears on the company's official careers page.",
   'Research the company on professional networks like LinkedIn.',
   'Never pay any fee or share sensitive identity information before a verified, written offer.',
 ]
@@ -19,47 +19,54 @@ const FRAUD_STEPS = [
   'If you have already shared sensitive information, contact your bank and relevant authorities immediately.',
 ]
 
+/* ── Next-steps list ─────────────────────────────────────────────────── */
 function NextSteps({ fraudulent }) {
   const steps = fraudulent ? FRAUD_STEPS : GENUINE_STEPS
-  const heading = fraudulent
-    ? 'What to do now'
-    : 'Still worth verifying'
-
   return (
-    <div className={`rounded-xl border p-4 ${fraudulent ? 'border-red-100 bg-red-50' : 'border-slate-100 bg-slate-50'}`}>
-      <h4 className={`mb-3 text-xs font-bold uppercase tracking-wider ${fraudulent ? 'text-red-700' : 'text-slate-600'}`}>
-        {heading}
-      </h4>
-      <ol className="space-y-2">
-        {steps.map((step, i) => (
-          <li key={i} className="flex gap-2.5 text-sm">
-            <span className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold ${fraudulent ? 'bg-red-200 text-red-800' : 'bg-slate-200 text-slate-700'}`}>
-              {i + 1}
-            </span>
-            <span className={fraudulent ? 'text-red-900' : 'text-slate-700'}>{step}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
+    <ol className="space-y-2.5">
+      {steps.map((step, i) => (
+        <li key={i} className="flex gap-3 text-sm">
+          <span
+            className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold"
+            style={{
+              background: fraudulent ? '#FECACA' : '#ECFDF5',
+              color:      fraudulent ? '#7F1D1D' : '#065F46',
+            }}
+          >
+            {i + 1}
+          </span>
+          <span style={{ color: fraudulent ? '#7F1D1D' : '#334155' }}>{step}</span>
+        </li>
+      ))}
+    </ol>
   )
 }
 
+/* ── Collapsible submitted text ─────────────────────────────────────── */
 function SubmittedText({ jobText }) {
   const [open, setOpen] = useState(false)
   return (
-    <div className="rounded-xl border border-slate-200">
+    <div className="rounded-lg overflow-hidden" style={{ border: '1px solid #E2E8F0' }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-slate-700 hover:bg-slate-50 transition rounded-xl"
+        className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold transition-colors"
+        style={{ color: '#334155', background: 'transparent' }}
+        onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
       >
         <span>View submitted text</span>
-        {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        {open
+          ? <ChevronUp size={15} style={{ color: '#94A3B8' }} />
+          : <ChevronDown size={15} style={{ color: '#94A3B8' }} />}
       </button>
       {open && (
-        <div className="border-t border-slate-100 px-4 py-3">
-          <pre className="max-h-48 overflow-y-auto whitespace-pre-wrap text-xs leading-6 text-slate-500 font-sans">
+        <div style={{ borderTop: '1px solid #E2E8F0', padding: '12px 16px' }}>
+          <pre
+            className="max-h-48 overflow-y-auto whitespace-pre-wrap font-sans text-xs leading-6"
+            style={{ color: '#64748B' }}
+          >
             {jobText}
           </pre>
         </div>
@@ -68,73 +75,133 @@ function SubmittedText({ jobText }) {
   )
 }
 
+/* ── Main component ─────────────────────────────────────────────────── */
 export default function ResultsPanel({ result, jobText, onReset }) {
   const fraudulent = result.prediction === 1
 
+  const verdictBg     = fraudulent ? '#FEF2F2'  : '#ECFDF5'
+  const verdictBorder = fraudulent ? '#FECACA'  : '#A7F3D0'
+  const verdictIcon   = fraudulent ? '#DC2626'  : '#10B981'
+  const verdictIconBg = fraudulent ? '#FEE2E2'  : '#D1FAE5'
+  const verdictLabel  = fraudulent ? '#DC2626'  : '#10B981'
+  const verdictTitle  = fraudulent ? '#7F1D1D'  : '#065F46'
+  const verdictBody   = fraudulent ? '#991B1B'  : '#064E3B'
+  const tagBg         = fraudulent ? '#FEE2E2'  : '#D1FAE5'
+  const tagBorder     = fraudulent ? '#FECACA'  : '#A7F3D0'
+  const tagText       = fraudulent ? '#7F1D1D'  : '#065F46'
+  const noticeBg      = fraudulent ? '#FEE2E2'  : '#D1FAE5'
+  const noticeBorder  = fraudulent ? '#FECACA'  : '#A7F3D0'
+  const noticeText    = fraudulent ? '#7F1D1D'  : '#065F46'
+
   return (
-    <div className="animate-slide-up space-y-5">
-      {/* Main verdict card */}
-      <div className={`rounded-2xl border shadow-sm ${fraudulent ? 'border-red-200 bg-red-50' : 'border-emerald-200 bg-emerald-50'}`}>
+    <div className="space-y-4 animate-slide-up">
+
+      {/* ── Verdict card ── */}
+      <div
+        className="overflow-hidden rounded-xl"
+        style={{ background: verdictBg, border: `1px solid ${verdictBorder}` }}
+      >
         <div className="px-6 py-5">
-          {/* Icon + label */}
+
+          {/* Icon + label row */}
           <div className="flex items-start gap-4">
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl shadow-sm ${fraudulent ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}`}>
-              {fraudulent ? <ShieldAlert size={26} /> : <ShieldCheck size={26} />}
+            <div
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+              style={{ background: verdictIconBg, color: verdictIcon }}
+            >
+              {fraudulent
+                ? <ShieldAlert size={24} strokeWidth={2} />
+                : <ShieldCheck size={24} strokeWidth={2} />}
             </div>
             <div>
-              <p className={`text-xs font-bold uppercase tracking-widest ${fraudulent ? 'text-red-500' : 'text-emerald-600'}`}>
+              <p
+                className="text-[11px] font-bold uppercase tracking-widest"
+                style={{ color: verdictLabel }}
+              >
                 {fraudulent ? 'Warning indicator' : 'Positive indicator'}
               </p>
-              <h3 className={`mt-0.5 text-2xl font-extrabold ${fraudulent ? 'text-red-800' : 'text-emerald-800'}`}>
+              <h3
+                className="mt-0.5 text-xl font-extrabold leading-tight"
+                style={{ color: verdictTitle }}
+              >
                 {result.label}
               </h3>
             </div>
           </div>
 
           {/* Explanation */}
-          <p className={`mt-4 text-sm leading-6 ${fraudulent ? 'text-red-800' : 'text-emerald-800'}`}>
+          <p
+            className="mt-4 text-sm leading-6"
+            style={{ color: verdictBody }}
+          >
             {fraudulent
-              ? 'The ML classifier flagged this posting as potentially fraudulent based on patterns in the text. This is an automated screening result — review the safety checks and next steps below before taking any action.'
+              ? 'The ML classifier flagged this posting as potentially fraudulent based on patterns in the text. This is an automated screening result — review the safety checks and guidance below before taking any action.'
               : 'The ML classifier found patterns consistent with genuine job postings. This does not guarantee legitimacy — use the guidance below to verify the employer independently.'}
           </p>
 
-          {/* Model output detail */}
-          <div className={`mt-4 inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-mono ${fraudulent ? 'border-red-200 bg-red-100 text-red-700' : 'border-emerald-200 bg-emerald-100 text-emerald-700'}`}>
-            <span className="font-sans font-semibold">Model output:</span>
-            prediction = {result.prediction} — {result.label}
+          {/* Model output tag */}
+          <div
+            className="mt-4 inline-flex items-center gap-2 rounded-md px-3 py-1.5"
+            style={{
+              background: tagBg,
+              border: `1px solid ${tagBorder}`,
+              color: tagText,
+            }}
+          >
+            <span className="text-xs font-semibold">Model output:</span>
+            <code className="font-mono text-xs">
+              prediction = {result.prediction} — {result.label}
+            </code>
           </div>
         </div>
 
-        {/* Notice banner */}
-        <div className={`flex gap-2.5 border-t px-6 py-3 ${fraudulent ? 'border-red-200 bg-red-100/60' : 'border-emerald-200 bg-emerald-100/60'}`}>
-          <AlertTriangle size={14} className={`mt-0.5 shrink-0 ${fraudulent ? 'text-red-500' : 'text-emerald-600'}`} />
-          <p className={`text-xs leading-5 ${fraudulent ? 'text-red-700' : 'text-emerald-700'}`}>
+        {/* Notice strip */}
+        <div
+          className="flex gap-2.5 px-6 py-3"
+          style={{
+            background: noticeBg,
+            borderTop: `1px solid ${noticeBorder}`,
+          }}
+        >
+          <AlertTriangle size={13} className="mt-0.5 shrink-0" style={{ color: verdictIcon }} />
+          <p className="text-xs leading-5" style={{ color: noticeText }}>
             {result.notice}
           </p>
         </div>
       </div>
 
-      {/* Safety checks */}
+      {/* ── Safety checks ── */}
       <SafetyChecks jobText={jobText} />
 
-      {/* Next steps */}
-      <div className="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm animate-slide-up">
-        <h3 className="mb-4 font-extrabold text-slate-900">Guidance</h3>
+      {/* ── Guidance ── */}
+      <div className="card px-6 py-5 animate-slide-up">
+        <div className="mb-4 flex items-center gap-2">
+          <CheckCircle2 size={17} style={{ color: '#4F46E5' }} />
+          <h3 className="text-sm font-bold" style={{ color: '#0F172A' }}>
+            {fraudulent ? 'What to do now' : 'Still worth verifying'}
+          </h3>
+        </div>
         <NextSteps fraudulent={fraudulent} />
       </div>
 
-      {/* Submitted text collapsible + analyze another */}
-      <div className="rounded-2xl border border-slate-200 bg-white px-6 py-5 shadow-sm space-y-4 animate-slide-up">
+      {/* ── Submitted text + reset ── */}
+      <div className="card space-y-4 px-6 py-5 animate-slide-up">
         <SubmittedText jobText={jobText} />
-
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-3 text-sm font-bold text-indigo-700 transition hover:bg-indigo-100 focus-visible:outline-indigo-600"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-bold transition-colors"
+          style={{
+            background: '#EEF2FF',
+            border: '1px solid #C7D2FE',
+            color: '#4F46E5',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#E0E7FF')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#EEF2FF')}
         >
-          <RotateCcw size={16} />
+          <RotateCcw size={15} />
           Analyze another job posting
-          <ArrowRight size={15} />
+          <ArrowRight size={14} />
         </button>
       </div>
     </div>

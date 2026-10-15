@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, Zap, Brain } from 'lucide-react'
+import { ArrowRight, ShieldCheck, Brain, Zap } from 'lucide-react'
 
 const pills = [
   { icon: <ShieldCheck size={13} />, text: 'ML-powered screening' },
@@ -10,37 +10,52 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden bg-white border-b border-slate-100"
+      className="relative overflow-hidden"
+      style={{ background: '#FFFFFF', borderBottom: '1px solid #E2E8F0' }}
     >
-      {/* Subtle background grid */}
+      {/* Very subtle background tint — one soft radial, nothing more */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage:
-            'radial-gradient(circle at 70% 50%, rgba(99,102,241,0.07) 0%, transparent 60%), ' +
-            'radial-gradient(circle at 20% 80%, rgba(139,92,246,0.05) 0%, transparent 50%)',
+          background:
+            'radial-gradient(ellipse 80% 60% at 65% 40%, rgba(79,70,229,0.05) 0%, transparent 70%)',
         }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8 lg:py-28">
         <div className="max-w-2xl">
 
           {/* Badge */}
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
-            <ShieldCheck size={13} />
+          <div
+            className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
+            style={{
+              background: '#EEF2FF',
+              border: '1px solid #C7D2FE',
+              color: '#4F46E5',
+            }}
+          >
+            <ShieldCheck size={12} strokeWidth={2.5} />
             Academic NLP &amp; Machine Learning Project
           </div>
 
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl lg:text-[3.25rem]">
+          {/* Headline */}
+          <h1
+            className="text-4xl font-extrabold leading-[1.15] tracking-tight sm:text-5xl"
+            style={{ color: '#0F172A' }}
+          >
             Spot fraudulent job{' '}
-            <span className="text-indigo-600">postings</span>{' '}
+            <span style={{ color: '#4F46E5' }}>postings</span>{' '}
             before you apply.
           </h1>
 
-          <p className="mt-5 max-w-xl text-base leading-7 text-slate-500 sm:text-lg sm:leading-8">
-            Paste any job advertisement — from a job portal, email, or
-            WhatsApp message — and let the AI screen it for signs of fraud in
+          {/* Sub-heading */}
+          <p
+            className="mt-5 max-w-xl text-[1.0625rem] leading-7"
+            style={{ color: '#64748B' }}
+          >
+            Paste any job advertisement — from a portal, recruitment email, or
+            WhatsApp message — and let the AI screen it for fraud indicators in
             seconds.
           </p>
 
@@ -49,32 +64,54 @@ export default function Hero() {
             {pills.map(({ icon, text }) => (
               <span
                 key={text}
-                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-600"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
+                style={{
+                  background: '#F8FAFC',
+                  border: '1px solid #E2E8F0',
+                  color: '#64748B',
+                }}
               >
-                <span className="text-indigo-500">{icon}</span>
+                <span style={{ color: '#4F46E5' }}>{icon}</span>
                 {text}
               </span>
             ))}
           </div>
 
-          {/* CTA */}
+          {/* CTAs */}
           <div className="mt-8 flex flex-wrap gap-3">
             <a
               href="#analyzer"
-              className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 focus-visible:outline-indigo-600"
+              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-bold text-white transition-colors"
+              style={{ background: '#4F46E5', textDecoration: 'none' }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#4338CA')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#4F46E5')}
             >
-              Analyze a job posting <ArrowRight size={16} />
+              Analyze a job posting <ArrowRight size={15} />
             </a>
             <a
               href="#how"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-colors"
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #E2E8F0',
+                color: '#334155',
+                textDecoration: 'none',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.borderColor = '#CBD5E1'
+                e.currentTarget.style.background = '#F8FAFC'
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.borderColor = '#E2E8F0'
+                e.currentTarget.style.background = '#FFFFFF'
+              }}
             >
               How it works
             </a>
           </div>
 
-          <p className="mt-5 text-xs text-slate-400">
-            Results are screening indicators only — always verify independently.
+          <p className="mt-5 text-xs" style={{ color: '#94A3B8' }}>
+            Results are screening indicators only — always verify employers independently.
           </p>
         </div>
       </div>
