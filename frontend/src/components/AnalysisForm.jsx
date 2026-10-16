@@ -1,251 +1,244 @@
 import { useRef } from 'react'
-import { Search, RotateCcw, LoaderCircle, ClipboardPaste, AlertTriangle, Sparkles } from 'lucide-react'
+import { Search, Trash2, LoaderCircle, Info, Lock } from 'lucide-react'
 
-const MAX_CHARS = 20_000
+const MAX_CHARS = 5000   /* match image counter style */
 
-const EXAMPLE_TEXT = `Job Title: Remote Data Entry Specialist
+const EXAMPLE_TEXT = `We are hiring Remote Data Entry Executives!
 
-Company: GlobalWork Solutions
-
-We are looking for enthusiastic individuals to join our remote data entry team. No experience required — full training provided. Earn up to $5,000 per week working from home at your own pace.
+Earn ₹50,000 per month working from home. No prior experience needed.
 
 Responsibilities:
-- Enter data from provided spreadsheets
-- Respond to emails from clients
-- Attend weekly video briefings
+- Simple data entry work
+- 2-3 hours per day
 
 Requirements:
-- A working computer and internet connection
-- Willingness to learn
-- Must be 18 or older
+- Basic computer knowledge
+- Must pay a registration fee of ₹999 to start
+- Share your Aadhaar card and bank details for verification
 
-Benefits:
-- Flexible hours — work whenever you like
-- Weekly pay via bank transfer
-- Paid holidays after 3 months
-
-To apply, send your CV and a registration fee of $50 to secure your starter kit. Contact us on WhatsApp: +1-555-0100.`
+Apply now and get selected immediately!`
 
 export default function AnalysisForm({ jobText, onChange, onSubmit, onClear, loading, error }) {
   const textareaRef = useRef(null)
   const charCount   = jobText.length
-  const remaining   = MAX_CHARS - charCount
-  const overLimit   = remaining < 0
+  const overLimit   = charCount > MAX_CHARS
   const isEmpty     = jobText.trim().length === 0
-  const fillPercent = Math.min((charCount / MAX_CHARS) * 100, 100)
 
   function loadExample() {
     onChange({ target: { value: EXAMPLE_TEXT } })
     setTimeout(() => textareaRef.current?.focus(), 50)
   }
 
-  const counterColor = overLimit ? '#EF4444' : remaining < 1000 ? '#F59E0B' : '#475569'
-  const progressColor = overLimit
-    ? 'linear-gradient(90deg, #EF4444, #DC2626)'
-    : remaining < 1000
-    ? 'linear-gradient(90deg, #F59E0B, #EF4444)'
-    : 'linear-gradient(90deg, #6C63FF, #06B6D4)'
-
   return (
-    <div
-      className="overflow-hidden animate-fade-in"
-      style={{
-        background: 'rgba(15, 23, 42, 0.7)',
-        border: '1px solid rgba(108,99,255,0.2)',
-        borderRadius: 20,
-        backdropFilter: 'blur(20px)',
-        boxShadow: '0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)',
-      }}
-    >
-      {/* ── Card header ── */}
-      <div
-        className="flex flex-wrap items-center justify-between gap-3 px-6 py-5"
-        style={{
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          background: 'rgba(108,99,255,0.05)',
-        }}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="flex h-10 w-10 items-center justify-center rounded-xl"
-            style={{
-              background: 'linear-gradient(135deg, #6C63FF, #8B5CF6)',
-              boxShadow: '0 4px 12px rgba(108,99,255,0.4)',
-            }}
-          >
-            <Search size={18} color="white" />
-          </div>
-          <div>
-            <h2 className="text-base font-bold" style={{ color: '#F1F5F9' }}>
-              Analyze a Job Posting
-            </h2>
-            <p className="mt-0.5 text-xs" style={{ color: '#64748B' }}>
-              Paste the full advertisement — title, description, requirements.
-            </p>
-          </div>
-        </div>
+    <div className="fade-in">
+      {/* Page heading */}
+      <h1 style={{ fontSize: 26, fontWeight: 800, color: '#111827', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+        Analyze a Job Posting
+      </h1>
+      <p style={{ fontSize: 14, color: '#6B7280', marginBottom: 24 }}>
+        Paste the complete job advertisement to check for potential warning signs.
+      </p>
 
-        <button
-          type="button"
-          onClick={loadExample}
-          className="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-semibold transition-all"
+      {/* Card */}
+      <div className="card" style={{ borderRadius: 14, overflow: 'hidden' }}>
+
+        {/* Card header */}
+        <div
           style={{
-            background: 'rgba(108,99,255,0.1)',
-            border: '1px solid rgba(108,99,255,0.2)',
-            color: '#A5B4FC',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.background = 'rgba(108,99,255,0.2)'
-            e.currentTarget.style.borderColor = 'rgba(108,99,255,0.4)'
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.background = 'rgba(108,99,255,0.1)'
-            e.currentTarget.style.borderColor = 'rgba(108,99,255,0.2)'
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '14px 18px',
+            borderBottom: '1px solid #E5E7EB',
+            background: '#FAFAFA',
           }}
         >
-          <ClipboardPaste size={12} />
-          Load example
-        </button>
-      </div>
-
-      {/* ── Body ── */}
-      <div className="px-6 py-5">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Search size={16} color="#4F46E5" />
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#111827' }}>
+              Job Advertisement
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={onClear}
+            disabled={isEmpty}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5,
+              fontSize: 12, fontWeight: 600, color: isEmpty ? '#D1D5DB' : '#6B7280',
+              background: 'none', border: 'none', cursor: isEmpty ? 'default' : 'pointer',
+              padding: '4px 8px', borderRadius: 6,
+              transition: 'color 0.15s',
+            }}
+            onMouseEnter={e => { if (!isEmpty) e.currentTarget.style.color = '#DC2626' }}
+            onMouseLeave={e => { e.currentTarget.style.color = isEmpty ? '#D1D5DB' : '#6B7280' }}
+          >
+            <Trash2 size={13} />
+            Clear Text
+          </button>
+        </div>
 
         {/* Textarea */}
-        <label htmlFor="job-text" className="sr-only">
-          Paste your job advertisement here
-        </label>
-        <textarea
-          id="job-text"
-          ref={textareaRef}
-          value={jobText}
-          onChange={onChange}
-          rows={13}
-          maxLength={MAX_CHARS + 100}
-          placeholder={
-            'Paste the full job posting here…\n\nYou can copy text from:\n  • LinkedIn, Indeed, or any job portal\n  • A recruitment or company email\n  • A WhatsApp or chat message\n\nNo need to separate fields — paste it all as-is.'
-          }
-          aria-describedby="char-count-hint"
-          className="w-full resize-y rounded-xl px-4 py-4 text-sm leading-7 outline-none transition-all duration-200"
-          style={{
-            border: overLimit
-              ? '1.5px solid rgba(239,68,68,0.5)'
-              : '1.5px solid rgba(148,163,184,0.1)',
-            color: '#CBD5E1',
-            background: 'rgba(8,11,20,0.6)',
-            boxShadow: overLimit ? '0 0 0 3px rgba(239,68,68,0.1)' : undefined,
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
-          }}
-          onFocus={e => {
-            if (!overLimit) {
-              e.currentTarget.style.border = '1.5px solid rgba(108,99,255,0.5)'
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(108,99,255,0.1)'
+        <div style={{ padding: '0 0 0 0' }}>
+          <label htmlFor="job-text" className="sr-only">Paste job advertisement</label>
+          <textarea
+            id="job-text"
+            ref={textareaRef}
+            value={jobText}
+            onChange={onChange}
+            rows={12}
+            placeholder={
+              'Paste the full job posting here.\n\nYou can copy text from LinkedIn, Indeed,\na recruitment email, or WhatsApp message.\n\nNo need to separate fields — paste it all.'
             }
-          }}
-          onBlur={e => {
-            e.currentTarget.style.border = overLimit
-              ? '1.5px solid rgba(239,68,68,0.5)'
-              : '1.5px solid rgba(148,163,184,0.1)'
-            e.currentTarget.style.boxShadow = 'none'
-          }}
-        />
-
-        {/* Progress bar */}
-        <div className="mt-3 space-y-1.5">
-          <div
             style={{
-              height: 3,
-              background: 'rgba(255,255,255,0.06)',
-              borderRadius: 99,
-              overflow: 'hidden',
+              width: '100%',
+              resize: 'vertical',
+              border: 'none',
+              borderBottom: '1px solid #E5E7EB',
+              outline: 'none',
+              padding: '16px 18px',
+              fontSize: 13.5,
+              lineHeight: 1.7,
+              color: '#111827',
+              background: '#FFFFFF',
+              fontFamily: 'Inter, sans-serif',
+            }}
+            onFocus={e => (e.currentTarget.style.background = '#FAFEFF')}
+            onBlur={e => (e.currentTarget.style.background = '#FFFFFF')}
+          />
+        </div>
+
+        {/* Counter row */}
+        <div
+          style={{
+            padding: '10px 18px',
+            display: 'flex', justifyContent: 'flex-end',
+            background: '#FAFAFA',
+            borderBottom: '1px solid #E5E7EB',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 12,
+              fontWeight: 500,
+              color: overLimit ? '#DC2626' : '#9CA3AF',
             }}
           >
-            <div
-              style={{
-                height: '100%',
-                width: `${fillPercent}%`,
-                background: progressColor,
-                borderRadius: 99,
-                transition: 'width 0.3s ease, background 0.3s ease',
-              }}
-            />
-          </div>
-          <div id="char-count-hint" className="flex items-center justify-between">
-            <span className="text-[11px] font-medium" style={{ color: counterColor }}>
-              {charCount.toLocaleString()} / {MAX_CHARS.toLocaleString()} chars
-              {overLimit && ' — over limit'}
-            </span>
-            {charCount > 0 && (
-              <button
-                type="button"
-                onClick={onClear}
-                className="text-[11px] font-semibold transition-colors"
-                style={{ color: '#475569' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#EF4444')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#475569')}
-                aria-label="Clear text area"
-              >
-                ✕ Clear
-              </button>
-            )}
-          </div>
+            {charCount}/{MAX_CHARS} characters
+          </span>
         </div>
 
         {/* Error */}
         {error && (
           <div
-            role="alert"
-            className="mt-4 flex gap-3 rounded-xl px-4 py-3.5 text-sm animate-slide-up"
             style={{
-              background: 'rgba(239,68,68,0.1)',
-              border: '1px solid rgba(239,68,68,0.3)',
-              color: '#FCA5A5',
+              margin: '0 18px 0',
+              padding: '10px 14px',
+              background: '#FEF2F2',
+              border: '1px solid #FECACA',
+              borderRadius: 8,
+              display: 'flex', gap: 8, alignItems: 'flex-start',
+              marginTop: 12, marginBottom: 4,
             }}
           >
-            <AlertTriangle size={16} className="mt-0.5 shrink-0" style={{ color: '#EF4444' }} />
-            <p>{error}</p>
+            <Info size={15} color="#DC2626" style={{ flexShrink: 0, marginTop: 1 }} />
+            <p style={{ fontSize: 13, color: '#7F1D1D', margin: 0 }}>{error}</p>
           </div>
         )}
 
-        {/* Action buttons */}
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+        {/* Info + privacy row */}
+        <div style={{ padding: '14px 18px', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+
+          {/* Tips box */}
+          <div
+            style={{
+              flex: '1 1 200px',
+              background: '#EFF6FF',
+              border: '1px solid #BFDBFE',
+              borderRadius: 10,
+              padding: '12px 14px',
+              display: 'flex', gap: 10,
+            }}
+          >
+            <Info size={15} color="#3B82F6" style={{ flexShrink: 0, marginTop: 1 }} />
+            <div>
+              <p style={{ fontSize: 12, fontWeight: 700, color: '#1E40AF', margin: '0 0 5px' }}>
+                Tips for better results:
+              </p>
+              <ul style={{ margin: 0, padding: '0 0 0 14px', fontSize: 11.5, color: '#1D4ED8', lineHeight: 1.7 }}>
+                <li>Paste the complete job advertisement</li>
+                <li>Include all details such as requirements, benefits, and company info</li>
+                <li>Do not modify the text</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Privacy box */}
+          <div
+            style={{
+              flex: '1 1 160px',
+              background: '#F0FDF4',
+              border: '1px solid #BBF7D0',
+              borderRadius: 10,
+              padding: '12px 14px',
+              display: 'flex', gap: 10,
+            }}
+          >
+            <Lock size={15} color="#059669" style={{ flexShrink: 0, marginTop: 1 }} />
+            <div>
+              <p style={{ fontSize: 12, fontWeight: 700, color: '#065F46', margin: '0 0 4px' }}>
+                Your privacy is important
+              </p>
+              <p style={{ fontSize: 11.5, color: '#047857', margin: 0, lineHeight: 1.6 }}>
+                Your data is analyzed only for this prediction and is not stored.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Analyze button */}
+        <div style={{ padding: '4px 18px 18px' }}>
           <button
             type="button"
-            id="analyze-btn"
-            onClick={onSubmit}
+            onClick={() => { if (!isEmpty && !overLimit) onSubmit() }}
             disabled={loading || isEmpty || overLimit}
-            className="btn-primary flex-1 py-3.5 text-sm"
-            style={{ borderRadius: 12 }}
+            className="btn-primary"
+            style={{
+              width: '100%',
+              padding: '14px',
+              fontSize: 15,
+              borderRadius: 10,
+              letterSpacing: '0.01em',
+            }}
           >
             {loading ? (
               <>
-                <LoaderCircle className="animate-spin" size={16} />
+                <LoaderCircle className="spin-slow" size={18} />
                 Analyzing…
               </>
             ) : (
               <>
-                <Sparkles size={16} />
+                <Search size={17} />
                 Analyze Job
               </>
             )}
           </button>
-
-          <button
-            type="button"
-            onClick={onClear}
-            disabled={loading}
-            className="btn-ghost py-3.5 text-sm px-5"
-            style={{ borderRadius: 12 }}
-          >
-            <RotateCcw size={14} />
-            Clear
-          </button>
         </div>
-
-        <p className="mt-4 text-[11px] leading-5" style={{ color: '#334155' }}>
-          🔒 Text is sent only to the local Flask API on your machine and is not stored or transmitted elsewhere.
-        </p>
       </div>
+
+      {/* Load example link */}
+      <p style={{ marginTop: 10, fontSize: 12, color: '#9CA3AF', textAlign: 'center' }}>
+        Want to test?{' '}
+        <button
+          type="button"
+          onClick={loadExample}
+          style={{
+            background: 'none', border: 'none', padding: 0,
+            color: '#4F46E5', fontWeight: 600, cursor: 'pointer', fontSize: 12,
+            textDecoration: 'underline',
+          }}
+        >
+          Load a sample fraudulent job
+        </button>
+      </p>
     </div>
   )
 }

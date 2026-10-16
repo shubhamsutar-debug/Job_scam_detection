@@ -1,35 +1,40 @@
-import { Lock } from 'lucide-react'
+import { Lock, CheckCircle2 } from 'lucide-react'
+
+const items = [
+  'Text is sent only to the Flask API running locally on your machine (127.0.0.1:5000). It is not transmitted to any external server.',
+  'No submitted text is stored, logged persistently, or used to retrain the model.',
+  'The safety-check analysis runs entirely inside your browser and never leaves your device.',
+  'No cookies, tracking pixels, or analytics scripts are used in this application.',
+]
 
 export default function PrivacyNotice() {
   return (
-    <section
-      className="py-10"
-      style={{ background: 'rgba(8,11,20,0.6)', borderTop: '1px solid rgba(255,255,255,0.05)' }}
-    >
+    <section style={{ background: '#F9FAFB', borderTop: '1px solid #E5E7EB', padding: '48px 0' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className="flex flex-col items-center gap-4 rounded-2xl px-6 py-6 text-center sm:flex-row sm:text-left"
-          style={{
-            background: 'rgba(108,99,255,0.05)',
-            border: '1px solid rgba(108,99,255,0.15)',
-            backdropFilter: 'blur(12px)',
-          }}
+          className="card"
+          style={{ maxWidth: 600, margin: '0 auto', padding: '24px 28px', borderRadius: 14 }}
         >
-          <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-            style={{ background: 'rgba(108,99,255,0.12)', color: '#6C63FF' }}
-          >
-            <Lock size={18} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div
+              style={{
+                width: 36, height: 36, borderRadius: 8,
+                background: '#EEF2FF',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+            >
+              <Lock size={17} color="#4F46E5" />
+            </div>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: 0 }}>Privacy notice</h2>
           </div>
-          <div>
-            <p className="text-sm font-semibold" style={{ color: '#A5B4FC' }}>
-              🔒 Your privacy is protected
-            </p>
-            <p className="mt-1 text-xs leading-5" style={{ color: '#475569' }}>
-              Text submitted for analysis is sent only to the locally running Flask API on your machine.
-              No data is stored, logged, or transmitted to any third-party server. This tool operates entirely locally.
-            </p>
-          </div>
+          <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {items.map((item, i) => (
+              <li key={i} style={{ display: 'flex', gap: 10 }}>
+                <CheckCircle2 size={15} color="#059669" style={{ flexShrink: 0, marginTop: 2 }} />
+                <p style={{ fontSize: 13, color: '#6B7280', margin: 0, lineHeight: 1.65 }}>{item}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>
